@@ -59,8 +59,8 @@ public class PairRange {
 	 * @return successful if true
 	 */
 	public boolean merge(PairRange r) {
-		int dm = p.distance(r.p);
-		int dn = s.distance(r.s);
+		int dm = p.distanceTo(r.p);
+		int dn = s.distanceTo(r.s);
 
 		if ((dm == 1 && dn == 1) || (dm == -1 && dn == -1)) {
 			p.merge(r.p);
@@ -85,8 +85,8 @@ public class PairRange {
 	 * @return successful if true
 	 */
 	public boolean merge(int pl, int sl) {
-		int dm = p.distance(pl);
-		int dn = s.distance(sl);
+		int dm = p.distanceTo(pl);
+		int dn = s.distanceTo(sl);
 
 		if ((dm == 1 && dn == 1) || (dm == -1 && dn == -1)) {
 			p.extend(pl);
@@ -109,8 +109,8 @@ public class PairRange {
 	 *         ranges get different side to this corresponding ranges.
 	 */
 	public PairRange between(PairRange r) {
-		int dp = p.distance(r.p);
-		int ds = s.distance(r.s);
+		int dp = p.distanceTo(r.p);
+		int ds = s.distanceTo(r.s);
 
 		if ((dp > 0 && ds > 0) || (dp < 0 && ds < 0)) {
 			return new PairRange(p.between(r.p), s.between(r.s));
@@ -133,8 +133,8 @@ public class PairRange {
 	 *         two boundaries get different side to this corresponding ranges.
 	 */
 	public PairRange between(int bp, int bs) {
-		int dp = p.distance(bp);
-		int ds = s.distance(bs);
+		int dp = p.distanceTo(bp);
+		int ds = s.distanceTo(bs);
 
 		if ((dp > 0 && ds > 0) || (dp < 0 && ds < 0)) {
 			return new PairRange(p.between(bp), s.between(bs));
@@ -151,8 +151,8 @@ public class PairRange {
 	 *         of this.
 	 */
 	public Difference different(PairRange r) {
-		int dp = p.distance(r.p);
-		int ds = s.distance(r.s);
+		int dp = p.distanceTo(r.p);
+		int ds = s.distanceTo(r.s);
 
 		if ((dp > 0 && ds > 0) || (dp < 0 && ds < 0)) {
 			return new Difference(Math.abs(dp) - 1, Math.abs(ds) - 1);
@@ -171,8 +171,8 @@ public class PairRange {
 	 * @return the value is null if two arguments at different side of this.
 	 */
 	public Difference different(int bp, int bs) {
-		int dp = p.distance(bp);
-		int ds = s.distance(bs);
+		int dp = p.distanceTo(bp);
+		int ds = s.distanceTo(bs);
 
 		if ((dp > 0 && ds > 0) || (dp < 0 && ds < 0)) {
 			return new Difference(Math.abs(dp) - 1, Math.abs(ds) - 1);

@@ -32,10 +32,12 @@ public class SingleRange {
 	 * @param left
 	 *            - left boundary value
 	 */
-	public void setLeft(int left) {
+	public SingleRange setLeft(int left) {
 		this.left = left;
 		if (this.right < left)
 			this.right = left - 1;
+
+		return this;
 	}
 
 	/**
@@ -45,10 +47,12 @@ public class SingleRange {
 	 * @param right
 	 *            - right boundary value
 	 */
-	public void setRight(int right) {
+	public SingleRange setRight(int right) {
 		this.right = right;
 		if (right < this.left)
 			this.left = right + 1;
+
+		return this;
 	}
 
 	public int getLeft() {
@@ -88,7 +92,7 @@ public class SingleRange {
 	 *         more than 0 if argument is on the right. the value is 0 if
 	 *         argument has overlay.
 	 */
-	public int distance(SingleRange r) {
+	public int distanceTo(SingleRange r) {
 		if (r.right < left)
 			return r.right - left;
 		else if (right < r.left)
@@ -111,7 +115,7 @@ public class SingleRange {
 	 *         more than 0 if argument is on the right. the value is 0 if
 	 *         argument has overlay.
 	 */
-	public int distance(int b) {
+	public int distanceTo(int b) {
 		if (b < left)
 			return b - left;
 		else if (right < b)
