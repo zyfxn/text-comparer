@@ -1,4 +1,4 @@
-package compare;
+package xuning.compare;
 
 /**
  * The class {@code PairRange} represents a pair of ranges, {@link SingleRange}

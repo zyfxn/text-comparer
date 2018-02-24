@@ -1,4 +1,4 @@
-package compare;
+package xuning.compare;
 
 /**
  * The class {@code SingleRange} represents a normal range on the number axis.

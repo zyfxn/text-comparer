@@ -1,4 +1,4 @@
-package compare;
+package xuning.compare;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 /**
  * 
