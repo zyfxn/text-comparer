@@ -34,7 +34,7 @@ public class Comparer {
 	 *            - secondary file content
 	 * @return {@code CompareResult}
 	 */
-	public CompareResult compare(String p, String s) {
+	public CompareResult compare(String[] p, String[] s) {
 		LinkedList<Line> pl = buildList(p);
 		LinkedList<Line> sl = buildList(s);
 
@@ -154,49 +154,19 @@ public class Comparer {
 
 		if (DEBUG) {
 			LOG.debug(String.format("diff: %d,%d,%d", res.add, res.mod, res.del));
-
-			String[] pFile = splitFrom(p);
-			String[] sFile = splitFrom(s);
 			LOG.debug("");
 
 			for (PairRange r : res.changedLines) {
 				for (int i = r.P().getLeft(); i <= r.P().getRight(); i++) {
-					LOG.debug(String.format("+%d>%s", i, pFile[i - 1].replaceAll("\t", "--->")));
+					LOG.debug(String.format("+%d>%s", i, p[i - 1].replaceAll("\t", "--->")));
 				}
 				for (int i = r.S().getLeft(); i <= r.S().getRight(); i++) {
-					LOG.debug(String.format("-%d>%s", i, sFile[i - 1].replaceAll("\t", "--->")));
+					LOG.debug(String.format("-%d>%s", i, s[i - 1].replaceAll("\t", "--->")));
 				}
 				LOG.debug("");
 			}
 		}
 		return res;
-	}
-
-	/**
-	 * Get file content.
-	 * 
-	 * @param filePath
-	 * @return content string.
-	 * @throws IOException
-	 */
-	public String getFileContent(String filePath) throws IOException {
-		if (filePath == null)
-			return null;
-
-		File file = new File(filePath);
-		FileReader filereader = new FileReader(file);
-		BufferedReader buffreader = new BufferedReader(filereader);
-
-		StringBuilder builder = new StringBuilder();
-		String temp;
-		while ((temp = buffreader.readLine()) != null) {
-			builder.append(temp).append('\n');
-		}
-
-		buffreader.close();
-		filereader.close();
-
-		return builder.toString();
 	}
 
 	/**
@@ -207,33 +177,17 @@ public class Comparer {
 	 * @return line data {@code LinkedList}. the value is null if content is
 	 *         null.
 	 */
-	private LinkedList<Line> buildList(String content) {
-		String[] lines = splitFrom(content);
-		if (lines == null) {
+	private LinkedList<Line> buildList(String[] content) {
+		if (content == null) {
 			return null;
 		}
 
 		LinkedList<Line> data = new LinkedList<Line>();
-		for (int i = 0; i < lines.length; i++) {
-			data.add(new Line(lines[i], i + 1));
+		for (int i = 0; i < content.length; i++) {
+			data.add(new Line(content[i], i + 1));
 		}
 
 		return data;
-	}
-
-	/**
-	 * A string split into lines.
-	 * 
-	 * @param content
-	 *            - file content
-	 * @return line data {@code String[]}. the value is null if content is null.
-	 */
-	public String[] splitFrom(String content) {
-		if (content == null || content.trim().isEmpty()) {
-			return null;
-		}
-
-		return content.split("\\n");
 	}
 
 	/**
