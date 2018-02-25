@@ -12,8 +12,7 @@ public class PairRangeTest {
         PairRange range1 = new PairRange(3,4,4,5);
 
         range0.merge(range1);
-        if(!(range0.P().getLeft() == 2 && range0.P().getRight() == 4 &&
-                range0.S().getLeft() == 2 && range0.S().getRight() == 5)) {
+        if(!range0.equals(2,4,2,5)) {
             fail("pair range(2,2)(2,3) could merge (3,4)(4,5) to (2,4)(2,5)");
         }
     }
@@ -24,8 +23,7 @@ public class PairRangeTest {
         PairRange range1 = new PairRange(3,4,4,5);
 
         range1.merge(range0);
-        if(!(range1.P().getLeft() == 2 && range1.P().getRight() == 4 &&
-                range1.S().getLeft() == 2 && range1.S().getRight() == 5)) {
+        if(!range1.equals(2,4,2,5)) {
             fail("pair range(3,4)(4,5) could merge (2,2)(2,3) to (2,4)(2,5)");
         }
     }
@@ -36,8 +34,7 @@ public class PairRangeTest {
         PairRange range1 = new PairRange(3,4,4,5);
 
         range1.merge(range0);
-        if(!(range1.P().getLeft() == 3 && range1.P().getRight() == 4 &&
-                range1.S().getLeft() == 2 && range1.S().getRight() == 5)) {
+        if(!range1.equals(3,4,2,5)) {
             fail("pair range(3,4)(4,5) could merge (3,2)(2,3) to (2,4)(2,5)");
         }
     }
@@ -51,8 +48,7 @@ public class PairRangeTest {
         if(success) {
             fail("pair range(3,4)(4,5) could not merge (0,1)(2,3)");
         }
-        if(!(range1.P().getLeft() == 3 && range1.P().getRight() == 4 &&
-                range1.S().getLeft() == 4 && range1.S().getRight() == 5)) {
+        if(!range1.equals(3,4,4,5)) {
             fail("pair range(3,4)(4,5) could not merge (0,1)(2,3)");
         }
     }
@@ -66,8 +62,7 @@ public class PairRangeTest {
         if(success) {
             fail("pair range(3,4)(4,5) could not merge (0,1)(2,3)");
         }
-        if(!(range1.P().getLeft() == 3 && range1.P().getRight() == 4 &&
-                range1.S().getLeft() == 4 && range1.S().getRight() == 5)) {
+        if(!range1.equals(3,4,4,5)) {
             fail("pair range(3,4)(4,5) could not merge (0,1)(2,3)");
         }
     }
@@ -80,8 +75,7 @@ public class PairRangeTest {
         if(!success) {
             fail("pair range(2,2)(2,3) could merge single line3,4 to (2,3)(2,4)");
         }
-        if(!(range0.P().getLeft() == 2 && range0.P().getRight() == 3 &&
-                range0.S().getLeft() == 2 && range0.S().getRight() == 4)) {
+        if(!range0.equals(2,3,2,4)) {
             fail("pair range(2,2)(2,3) could merge single line3,4 to (2,3)(2,4)");
         }
     }
@@ -94,8 +88,7 @@ public class PairRangeTest {
         if(success) {
             fail("pair range(2,2)(2,3) could not merge single line4,4");
         }
-        if(!(range0.P().getLeft() == 2 && range0.P().getRight() == 2 &&
-                range0.S().getLeft() == 2 && range0.S().getRight() == 3)) {
+        if(!range0.equals(2,2,2,3)) {
             fail("pair range(2,2)(2,3) could not merge single line4,4");
         }
     }
@@ -108,8 +101,7 @@ public class PairRangeTest {
         if(success) {
             fail("pair range(2,2)(2,3) could not merge single line3,3");
         }
-        if(!(range0.P().getLeft() == 2 && range0.P().getRight() == 2 &&
-                range0.S().getLeft() == 2 && range0.S().getRight() == 3)) {
+        if(!range0.equals(2,2,2,3)) {
             fail("pair range(2,2)(2,3) could not merge single line3,3");
         }
     }
