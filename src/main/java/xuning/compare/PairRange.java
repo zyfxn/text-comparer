@@ -45,6 +45,11 @@ public class PairRange {
 		this.s = new SingleRange(s, s);
 	}
 
+	public PairRange(int pLeft, int pRight, int sLeft, int sRight) {
+		this.p = new SingleRange(pLeft, pRight);
+		this.s = new SingleRange(sLeft, sRight);
+	}
+
 	/**
 	 * Merge from another pair of ranges. Successful if only two ranges in
 	 * argument is close to this corresponding ranges at same side.
@@ -178,6 +183,15 @@ public class PairRange {
 			return new Difference(Math.abs(dp) - 1, Math.abs(ds) - 1);
 		}
 		return null;
+	}
+
+	public Difference difference() {
+		return new Difference(p.length(), s.length());
+	}
+
+	public boolean equals(int pLeft, int pRight, int sLeft, int sRight) {
+		return p.equals(pLeft, pRight) &&
+				s.equals(sLeft, sRight);
 	}
 
 	public boolean isEmpty() {
