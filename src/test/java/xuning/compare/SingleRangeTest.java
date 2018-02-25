@@ -105,103 +105,103 @@ public class SingleRangeTest {
 
     @Test
     public void rangeBetween_range2to3_and_range5to9_is_range4to4() {
-        SingleRange range0 = new SingleRange(2,3);
-        SingleRange range1 = new SingleRange(5,9);
+        SingleRange range = new SingleRange(2,3)
+                .between(new SingleRange(5,9));
 
-        SingleRange between = range0.between(range1);
-        if(between.getLeft() != 4 || between.getRight() != 4) {
+        if(!range.equals(4,4)) {
             fail("range between (2,3) and (5,9) should be (4,4).");
         }
 
-        between = range1.between(range0);
-        if(between.getLeft() != 4 || between.getRight() != 4) {
+        range = new SingleRange(5,9)
+                .between(new SingleRange(2,3));
+        if(!range.equals(4,4)) {
             fail("range between (5,9) and (2,3) should be (4,4).");
         }
     }
 
     @Test
     public void rangeBetween_range2to3_and_range0to1_is_range2to1() {
-        SingleRange range0 = new SingleRange(2,3);
-        SingleRange range1 = new SingleRange(0,1);
+        SingleRange range = new SingleRange(2,3)
+                .between(new SingleRange(0,1));
 
-        SingleRange between = range0.between(range1);
-        if(between.getLeft() != 2 || between.getRight() != 1) {
+        if(!range.equals(2,1)) {
             fail("range between (2,3) and (0,1) should be (2,1).");
         }
-        if(!between.isEmpty()) {
+        if(!range.isEmpty()) {
             fail("range between (2,3) and (0,1) should be empty.");
         }
 
-        between = range1.between(range0);
-        if(between.getLeft() != 2 || between.getRight() != 1) {
+        range = new SingleRange(0,1)
+                .between(new SingleRange(2,3));
+        if(!range.equals(2,1)) {
             fail("range between (0,1) and (2,3) is (4,4).");
         }
-        if(!between.isEmpty()) {
+        if(!range.isEmpty()) {
             fail("range between (0,1) and (2,3) should be empty.");
         }
     }
 
     @Test
     public void rangeBetween_range2to3_and_range1to5_is_null() {
-        SingleRange range0 = new SingleRange(2,3);
-        SingleRange range1 = new SingleRange(1,5);
+        SingleRange range = new SingleRange(2,3)
+                .between(new SingleRange(1,5));
 
-        SingleRange between = range0.between(range1);
-        if(between != null) {
+        if(range != null) {
             fail("range between (2,3) and (1,5) should be null.");
         }
 
-        between = range1.between(range0);
-        if(between != null) {
+        range = new SingleRange(1,5)
+                .between(new SingleRange(2,3));
+        if(range != null) {
             fail("range between (1,5) and (2,3) should be null.");
         }
     }
 
     @Test
     public void rangeBetween_range2to3_and_range3to5_is_null() {
-        SingleRange range0 = new SingleRange(2,3);
-        SingleRange range1 = new SingleRange(3,5);
+        SingleRange range = new SingleRange(2,3)
+                .between(new SingleRange(3,5));
 
-        SingleRange between = range0.between(range1);
-        if(between != null) {
+        if(range != null) {
             fail("range between (2,3) and (3,5) should be null.");
         }
 
-        between = range1.between(range0);
-        if(between != null) {
+        range = new SingleRange(3,5)
+                .between(new SingleRange(2,3));
+        if(range != null) {
             fail("range between (3,5) and (2,3) should be null.");
         }
     }
 
     @Test
     public void rangeBetween_range2to3_and_5_is_range4to4() {
-        SingleRange range0 = new SingleRange(2,3);
+        SingleRange range = new SingleRange(2,3)
+                .between(5);
 
-        SingleRange between = range0.between(5);
-        if(between.getLeft() != 4 || between.getRight() != 4) {
+        if(!range.equals(4,4)) {
             fail("range between (2,3) and 5 should be (4,4).");
         }
     }
 
     @Test
     public void rangeBetween_range2to3_and_1_is_range2to1() {
-        SingleRange range0 = new SingleRange(2,3);
+        SingleRange range = new SingleRange(2,3)
+                .between(1);
 
-        SingleRange between = range0.between(1);
-        if(between.getLeft() != 2 || between.getRight() != 1) {
+        if(!range.equals(2,1)) {
             fail("range between (2,3) and 1 should be (2,1).");
         }
-        if(!between.isEmpty()) {
+        if(!range.isEmpty()) {
             fail("range between (2,3) and 1 should be empty.");
         }
     }
 
     @Test
     public void rangeBetween_range2to3_and_2_is_null() {
-        SingleRange range0 = new SingleRange(2,3);
+        SingleRange range = new SingleRange(2,3)
+                .between(2);
 
-        SingleRange between = range0.between(2);
-        if(between != null) {
+        if(range != null) {
             fail("range between (2,3) and 2 should be null.");
         }
     }
@@ -212,7 +212,7 @@ public class SingleRangeTest {
         SingleRange range1 = new SingleRange(5,8);
 
         range0.merge(range1);
-        if(range0.getLeft() != 2 || range0.getRight() != 8) {
+        if(!range0.equals(2,8)) {
             fail("merge range (2,3) with (5,8) should be (2,8).");
         }
     }
@@ -223,7 +223,7 @@ public class SingleRangeTest {
         SingleRange range1 = new SingleRange(1,0);
 
         range0.merge(range1);
-        if(range0.getLeft() != 1 || range0.getRight() != 3) {
+        if(!range0.equals(1,3)) {
             fail("merge range (2,3) with (1,0) should be (1,3).");
         }
     }
@@ -238,7 +238,7 @@ public class SingleRangeTest {
         {
             fail("merge range (2,3) with (1,2) should change nothing.");
         }
-        if(range0.getLeft() != 2 || range0.getRight() != 3) {
+        if(!range0.equals(2,3)) {
             fail("merge range (2,3) with (1,2) should change nothing.");
         }
     }
@@ -248,31 +248,31 @@ public class SingleRangeTest {
         SingleRange range0 = new SingleRange(2,3);
 
         range0.extend(8);
-        if(range0.getLeft() != 2 || range0.getRight() != 8) {
+        if(!range0.equals(2,8)) {
             fail("extend range (2,3) to 8 should be (2,8).");
         }
     }
 
     @Test
     public void extendRange2to3_to_1_is_range1to3() {
-        SingleRange range0 = new SingleRange(2,3);
+        SingleRange range = new SingleRange(2,3);
 
-        range0.extend(1);
-        if(range0.getLeft() != 1 || range0.getRight() != 3) {
+        range.extend(1);
+        if(!range.equals(1,3)) {
             fail("extend range (2,3) to 1 should be (1,3).");
         }
     }
 
     @Test
     public void extendRange2to3_to_2_nothingHappen() {
-        SingleRange range0 = new SingleRange(2,3);
+        SingleRange range = new SingleRange(2,3);
 
-        boolean success = range0.extend(2);
+        boolean success = range.extend(2);
         if(success)
         {
             fail("extend range (2,3) to 2 should change nothing.");
         }
-        if(range0.getLeft() != 2 || range0.getRight() != 3) {
+        if(!range.equals(2,3)) {
             fail("extend range (2,3) to 2 should change nothing.");
         }
     }

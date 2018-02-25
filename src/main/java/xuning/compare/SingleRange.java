@@ -210,6 +210,10 @@ public class SingleRange {
 		return false;
 	}
 
+	public boolean equals(int left, int right) {
+		return this.left == left && this.right == right;
+	}
+
 	public boolean isEmpty() {
 		return left > right;
 	}
