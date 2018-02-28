@@ -184,7 +184,7 @@ public class PairRangeTest {
         PairRange range0 = new PairRange(2,2,2,3);
 
         Difference diff = range0.difference();
-        if(!(diff.add == 0 && diff.mod == 1 && diff.del == 1)) {
+        if(!(diff.getAdd() == 0 && diff.getMod() == 1 && diff.getDel() == 1)) {
             fail("different of PairRange(2,2)(2,3) should be modify 1 line and delete 1 line.");
         }
     }
@@ -194,7 +194,7 @@ public class PairRangeTest {
         PairRange range0 = new PairRange(2,2,2,1);
 
         Difference diff = range0.difference();
-        if(!(diff.add == 1 && diff.mod == 0 && diff.del == 0)) {
+        if(!(diff.getAdd() == 1 && diff.getMod() == 0 && diff.getDel() == 0)) {
             fail("different of PairRange(2,2)(2,1) should be add 1 line.");
         }
     }

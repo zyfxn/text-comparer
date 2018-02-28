@@ -1,22 +1,41 @@
 package xuning.compare;
 
-import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class CompareResult extends Difference {
 
-	/**
-	 * Primary file size
-	 */
-	public int size0;
-	/**
-	 * Secondary file size
-	 */
-	public int size1;
-	/**
-	 * A list of same content paired ranges like this: a-b,c-d;e-f,g-h
-	 */
-	public String sameLine;
-	public LinkedList<PairRange> changedLines;
+	protected int primaryRangeSize;
+	protected int secondaryRangeSize;
 
-	public boolean trimedLengthExceeded = false;
+	protected TreeSet<PairRange> matchedRangeSet;
+	protected List<PairRange> differentRangeList;
+
+	private boolean trimmedLengthThresholdExceeded;
+
+	public Set<PairRange> getMatchedRangeSet() {
+		return matchedRangeSet;
+	}
+
+	public boolean isTrimmedLengthThresholdExceeded() {
+		return trimmedLengthThresholdExceeded;
+	}
+
+	public CompareResult setTrimmedLengthThresholdExceeded(boolean trimmedLengthThresholdExceeded) {
+		this.trimmedLengthThresholdExceeded = trimmedLengthThresholdExceeded;
+		return this;
+	}
+
+	public List<PairRange> getDifferentRangeList() {
+		return differentRangeList;
+	}
+
+	public int getPrimaryRangeSize() {
+		return primaryRangeSize;
+	}
+
+	public int getSecondaryRangeSize() {
+		return secondaryRangeSize;
+	}
 }

@@ -9,17 +9,29 @@ package xuning.compare;
  */
 public class Difference {
 
-	public int add = 0;
-	public int mod = 0;
-	public int del = 0;
-
-	public Difference() {
-	}
+	private int add = 0;
+	private int mod = 0;
+	private int del = 0;
 
 	public Difference(int dp, int ds) {
 		mod = dp > ds ? ds : dp;
 		add = dp - mod;
 		del = ds - mod;
+	}
+
+	public Difference() {
+	}
+
+	public int getAdd() {
+		return add;
+	}
+
+	public int getMod() {
+		return mod;
+	}
+
+	public int getDel() {
+		return del;
 	}
 
 	public void add(Difference d) {
@@ -28,9 +40,7 @@ public class Difference {
 		del += d.del;
 	}
 
-	public void reset() {
-		mod = 0;
-		add = 0;
-		del = 0;
+	public String toString() {
+		return String.format("%d,%d,%d", add, mod, del);
 	}
 }

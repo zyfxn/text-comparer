@@ -2,6 +2,7 @@ package xuning.compare;
 
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TreeSet;
 
 class LeafSet {
@@ -68,24 +69,26 @@ class LeafSet {
 			trim = true;
 	}
 
-	public LinkedList<PairRange> output() {
-		LinkedList<PairRange> res = new LinkedList<PairRange>();
-		Node i = null;
+	public List<PairRange> output() {
+		List<PairRange> res = new LinkedList<>();
+		Node node = null;
 		if (leafs.size() > 0)
-			i = leafs.last();
+			node = leafs.last();
 
-		PairRange t = null;
-		while (i != null) {
-			if (t == null) {
-				t = new PairRange(i.x, i.y);
-			} else if (!t.merge(i.x, i.y)) {
-				res.addFirst(t);
-				t = new PairRange(i.x, i.y);
+		PairRange cacheRange = null;
+		while (node != null) {
+			if (cacheRange == null) {
+				cacheRange = new PairRange(node.x, node.y);
+			} else {
+				boolean success = cacheRange.merge(node.x, node.y);
+				if (!success) {
+					res.add(cacheRange);
+					cacheRange = new PairRange(node.x, node.y);
+				}
 			}
-
-			i = i.getFrom();
-			if (i == null) {
-				res.addFirst(t);
+			node = node.getFrom();
+			if (node == null) {
+				res.add(cacheRange);
 			}
 		}
 		return res;

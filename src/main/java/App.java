@@ -9,10 +9,6 @@ public class App {
     public static void main(String[] args) throws IOException {
         PropertyConfigurator.configure("log4j.properties");
 
-        Comparer c = new Comparer();
-        c.sameRangesOutput = true;
-        c.DEBUG = true;
-
         String p = null;
         String s = null;
 
@@ -23,6 +19,8 @@ public class App {
             s = TextFile.getFileContent(args[1]);
         }
 
+        Comparer c = new Comparer();
+        c.DEBUG = true;
         c.compare(TextFile.splitFrom(p),
                 TextFile.splitFrom(s));
     }

@@ -1,13 +1,6 @@
 package xuning.compare;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
@@ -18,72 +11,54 @@ import org.apache.log4j.Logger;
  */
 public class Comparer {
 
+	private static Logger LOG = Logger.getLogger(Comparer.class);
 	public boolean DEBUG = false;
 
-	public boolean sameRangesOutput = false;
 	public int lengthThresholdAfterTrim = 0;
-
-	private static Logger LOG = Logger.getLogger(Comparer.class);
+	private MatchedRangeWorker matchedRangeWorker;
 
 	/**
 	 * Compare two strings, which contain entire file content.
 	 * 
-	 * @param p
+	 * @param primaryFileContent
 	 *            - primary file content
-	 * @param s
+	 * @param secondaryFileContent
 	 *            - secondary file content
 	 * @return {@code CompareResult}
 	 */
-	public CompareResult compare(String[] p, String[] s) {
-		LinkedList<Line> pl = buildList(p);
-		LinkedList<Line> sl = buildList(s);
+	public CompareResult compare(String[] primaryFileContent, String[] secondaryFileContent) {
+		LinkedList<Line> pl = buildList(primaryFileContent);
+		LinkedList<Line> sl = buildList(secondaryFileContent);
 
-		CompareResult res = new CompareResult();
-		int pLeft = 1;
-		int pRight = 0;
-		int sLeft = 1;
-		int sRight = 0;
+		matchedRangeWorker = new MatchedRangeWorker();
 
-		// get file size range
-		if (pl != null) {
-			pLeft = pl.getFirst().num;
-			pRight = pl.getLast().num;
+		if(secondaryFileContent != null) {
+			matchedRangeWorker.setSecondaryRangeSize(secondaryFileContent.length);
 		}
-		if (sl != null) {
-			sLeft = sl.getFirst().num;
-			sRight = sl.getLast().num;
-		}
-
-		res.size0 = pRight;
-		res.size1 = sRight;
-
-		if (DEBUG) {
-			LOG.debug(String.format("size: %d-%d,%d-%d", pLeft, pRight, sLeft, sRight));
-		}
-
-		if (pl == null && sl != null) {
-			res.del = sRight;
-		} else if (pl != null && sl == null) {
-			res.add = pRight;
+		if(primaryFileContent != null) {
+			matchedRangeWorker.setPrimaryRangeSize(primaryFileContent.length);
 		}
 
 		// one of a file is empty
-		if (pl == null || sl == null) {
+		if (pl == null || pl.size() == 0 || sl == null || sl.size() == 0) {
+			CompareResult result = matchedRangeWorker.getDifferenceResult();
 			if (DEBUG) {
-				LOG.debug(String.format("diff: %d,%d,%d", res.add, res.mod, res.del));
+				LOG.debug(String.format("diff: %s", result.toString()));
 			}
-			return res;
+			return result;
 		}
 
 		Iterator<Line> pi = pl.iterator();
 		Iterator<Line> si = sl.iterator();
 		// trim from head
 		PairRange head = trim(pi, si);
+		if(head != null) matchedRangeWorker.addRange(head);
 
 		pi = pl.descendingIterator();
 		si = sl.descendingIterator();
 		// trim from tail
 		PairRange tail = trim(pi, si);
+		if(tail != null) matchedRangeWorker.addRange(tail);
 
 		if (DEBUG) {
 			LOG.debug("trim: " + (head != null ? head.toString() : "null") + ";"
@@ -93,80 +68,53 @@ public class Comparer {
 		// check the file length after trim whether exceeded the threshold
 		if (lengthThresholdAfterTrim > 0
 				&& (pl.size() > lengthThresholdAfterTrim || sl.size() > lengthThresholdAfterTrim)) {
+
 			if (DEBUG) {
 				LOG.debug(String.format("length %d,%d exceed %d", pl.size(), sl.size(), lengthThresholdAfterTrim));
 			}
 
-			res.trimedLengthExceeded = true;
+			CompareResult res = matchedRangeWorker.getDifferenceResult()
+					.setTrimmedLengthThresholdExceeded(true);
 			return res;
 		}
 
-		// begin the solution
-		LinkedList<PairRange> same = solv(pl, sl);
+		List<PairRange> solvedResult = solv(pl, sl);
 
-		// trim result add to this result
-		if (head != null)
-			same.addFirst(head);
-		if (tail != null)
-			same.add(tail);
-
-		String out = null;
-		if (sameRangesOutput) {
-			out = new String();
-			boolean first = true;
-			for (PairRange pair : same) {
-				if (first) {
-					first = false;
-				} else {
-					out += ";";
-				}
-				out += pair.toString();
-			}
-
-			if (DEBUG) {
-				LOG.debug("same paired ranges: " + out);
-			}
+		for(PairRange matchedRange : solvedResult) {
+			matchedRangeWorker.addRange(matchedRange);
 		}
 
-		// build res.changedLines and res.sameLine
-		res.sameLine = out;
-		res.add(same.getFirst().different(pLeft - 1, sLeft - 1));
-		res.add(same.getLast().different(pRight + 1, sRight + 1));
-
-		res.changedLines = new LinkedList<PairRange>();
-
-		PairRange tmp = same.getFirst().between(pLeft - 1, sLeft - 1);
-		if (!tmp.isEmpty())
-			res.changedLines.add(tmp);
-
-		PairRange last = null;
-		for (PairRange r : same) {
-			if (last != null) {
-				res.add(last.different(r));
-				res.changedLines.add(last.between(r));
-			}
-			last = r;
-		}
-
-		tmp = same.getLast().between(pRight + 1, sRight + 1);
-		if (!tmp.isEmpty())
-			res.changedLines.add(tmp);
+		CompareResult result = matchedRangeWorker.getDifferenceResult();
 
 		if (DEBUG) {
-			LOG.debug(String.format("diff: %d,%d,%d", res.add, res.mod, res.del));
-			LOG.debug("");
-
-			for (PairRange r : res.changedLines) {
-				for (int i = r.P().getLeft(); i <= r.P().getRight(); i++) {
-					LOG.debug(String.format("+%d>%s", i, p[i - 1].replaceAll("\t", "--->")));
-				}
-				for (int i = r.S().getLeft(); i <= r.S().getRight(); i++) {
-					LOG.debug(String.format("-%d>%s", i, s[i - 1].replaceAll("\t", "--->")));
-				}
-				LOG.debug("");
-			}
+			printDetails(result, primaryFileContent, secondaryFileContent);
 		}
-		return res;
+
+		return result;
+	}
+
+	private void printDetails(CompareResult result, String[] primaryFileContent, String[] secondaryFileContent) {
+		if(result == null) return;
+
+		LOG.debug(String.format("diff: %s", result.toString()));
+		LOG.debug("details:");
+
+		for (PairRange r : result.getDifferentRangeList()) {
+			if(primaryFileContent != null) {
+				for (int i = r.P().getLeft(); i <= r.P().getRight(); i++) {
+					LOG.debug(String.format("+%d>%s", i, primaryFileContent[i - 1]
+							.replaceAll("\t", "--->")));
+				}
+			}
+
+			if(secondaryFileContent != null) {
+				for (int i = r.S().getLeft(); i <= r.S().getRight(); i++) {
+					LOG.debug(String.format("-%d>%s", i, secondaryFileContent[i - 1]
+							.replaceAll("\t", "--->")));
+				}
+			}
+            LOG.debug("");
+        }
 	}
 
 	/**
@@ -259,9 +207,13 @@ public class Comparer {
 	 *            - secondary file data
 	 * @return the longest same paired ranges.
 	 */
-	private LinkedList<PairRange> solv(LinkedList<Line> p, LinkedList<Line> s) {
+	private List<PairRange> solv(LinkedList<Line> p, LinkedList<Line> s) {
 		if (p == null || s == null)
 			return null;
+
+		if(DEBUG) {
+			LOG.debug("algorithm test start");
+		}
 
 		Map<String, LinkedList<Integer>> smap = buildMap(s);
 		int same = 0;
@@ -283,6 +235,10 @@ public class Comparer {
 				}
 			}
 			set.nextLine();
+		}
+
+		if(DEBUG) {
+			LOG.debug("algorithm test finish");
 		}
 
 		return set.output();
