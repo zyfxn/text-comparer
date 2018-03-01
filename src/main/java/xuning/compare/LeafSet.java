@@ -8,16 +8,18 @@ import java.util.TreeSet;
 class LeafSet {
 
 	private final TreeSet<Node> leafs;
-	private final LinkedList<Node> branchs;
+	private final LinkedList<Node> needDeleteLeafs;
+
 	private Node h;
 	private Node l;
-	private int same;
-	private boolean trim;
 
-	public LeafSet(int same) {
-		leafs = new TreeSet<Node>(new LeafComparator());
-		branchs = new LinkedList<Node>();
-		this.same = same;
+	private int sizeOfLineHaveSame;
+	private boolean ending;
+
+	public LeafSet(int sizeOfLineHaveSame) {
+		leafs = new TreeSet<>(new LeafComparator());
+		needDeleteLeafs = new LinkedList<>();
+		this.sizeOfLineHaveSame = sizeOfLineHaveSame;
 	}
 
 	public boolean add(int x, int y) {
@@ -28,45 +30,44 @@ class LeafSet {
 		Node n = new Node(x, y);
 
 		h = leafs.ceiling(n);
-		if (h != null && h.y == y)
-			return false;
+		if (h != null && h.y == y) return false;
+
 		l = leafs.lower(n);
 
-		boolean bottom = false;
-		if (l == null)
-			bottom = true;
+		boolean atBottom = false;
+		if (l == null) atBottom = true;
 
-		if (!(trim && bottom)) {
+		boolean ignoreNodeFromTree = ending && atBottom;
+		if (!ignoreNodeFromTree) {
 			n.setFrom(l);
 			leafs.add(n);
 		}
 		l = n;
 
-		if (trim && bottom)
+		if (ignoreNodeFromTree)
 			return false;
 
 		if (h == null) {
-			if (trim)
-				leafs.remove(leafs.first());
+			if (ending) needDeleteLeafs.add(leafs.first());
 			return true;
 		} else
-			branchs.add(h);
+			needDeleteLeafs.add(h);
 
 		return false;
 	}
 
 	public void nextLine() {
-		for (Node n : branchs) {
+		for (Node n : needDeleteLeafs) {
 			leafs.remove(n);
 		}
-		branchs.clear();
+		needDeleteLeafs.clear();
 
-		if (trim && leafs.size() > 1)
+		if (ending && leafs.size() > 1)
 			leafs.remove(leafs.first());
 
-		same--;
-		if (!trim && leafs.size() >= same)
-			trim = true;
+		sizeOfLineHaveSame--;
+		if (!ending && leafs.size() >= sizeOfLineHaveSame)
+			ending = true;
 	}
 
 	public List<PairRange> output() {
