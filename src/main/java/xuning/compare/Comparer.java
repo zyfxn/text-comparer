@@ -12,10 +12,21 @@ import org.apache.log4j.Logger;
 public class Comparer {
 
 	private static Logger LOG = Logger.getLogger(Comparer.class);
-	public boolean DEBUG = false;
 
-	public int lengthThresholdAfterTrim = 0;
+	private boolean DEBUG = false;
+	private int trimmedLengthThreshold = 0;
+
 	private MatchedRangeWorker matchedRangeWorker;
+
+	public Comparer setDebug(boolean DEBUG) {
+		this.DEBUG = DEBUG;
+		return this;
+	}
+
+	public Comparer setTrimmedLengthThreshold(int trimmedLengthThreshold) {
+		this.trimmedLengthThreshold = trimmedLengthThreshold;
+		return this;
+	}
 
 	/**
 	 * Compare two strings, which contain entire file content.
@@ -61,16 +72,14 @@ public class Comparer {
 		if(tail != null) matchedRangeWorker.addRange(tail);
 
 		if (DEBUG) {
-			LOG.debug("trim: " + (head != null ? head.toString() : "null") + ";"
-					+ (tail != null ? tail.toString() : "null"));
+			LOG.debug("trim: " + (head != null ? head.toString() : "none") + ";"
+					+ (tail != null ? tail.toString() : "none"));
 		}
 
-		// check the file length after trim whether exceeded the threshold
-		if (lengthThresholdAfterTrim > 0
-				&& (pl.size() > lengthThresholdAfterTrim || sl.size() > lengthThresholdAfterTrim)) {
+		if (isTrimmedLengthThresholdAvailableAndExceeded(pl, sl)) {
 
 			if (DEBUG) {
-				LOG.debug(String.format("length %d,%d exceed %d", pl.size(), sl.size(), lengthThresholdAfterTrim));
+				LOG.debug(String.format("length %d,%d exceed %d", pl.size(), sl.size(), trimmedLengthThreshold));
 			}
 
 			CompareResult res = matchedRangeWorker.getDifferenceResult()
@@ -93,6 +102,12 @@ public class Comparer {
 		return result;
 	}
 
+	private boolean isTrimmedLengthThresholdAvailableAndExceeded(LinkedList<Line> pl, LinkedList<Line> sl) {
+		return trimmedLengthThreshold > 0
+				&& pl.size() > trimmedLengthThreshold
+				&& sl.size() > trimmedLengthThreshold;
+	}
+
 	private void printDetails(CompareResult result, String[] primaryFileContent, String[] secondaryFileContent) {
 		if(result == null) return;
 
@@ -100,6 +115,7 @@ public class Comparer {
 		LOG.debug("details:");
 
 		for (PairRange r : result.getDifferentRangeList()) {
+			LOG.debug("");
 			if(primaryFileContent != null) {
 				for (int i = r.P().getLeft(); i <= r.P().getRight(); i++) {
 					LOG.debug(String.format("+%d>%s", i, primaryFileContent[i - 1]
@@ -113,7 +129,6 @@ public class Comparer {
 							.replaceAll("\t", "--->")));
 				}
 			}
-            LOG.debug("");
         }
 	}
 
@@ -211,10 +226,6 @@ public class Comparer {
 		if (p == null || s == null)
 			return null;
 
-		if(DEBUG) {
-			LOG.debug("algorithm test start");
-		}
-
 		Map<String, LinkedList<Integer>> smap = buildMap(s);
 		int same = 0;
 		for (Line x : p) {
@@ -235,10 +246,6 @@ public class Comparer {
 				}
 			}
 			set.nextLine();
-		}
-
-		if(DEBUG) {
-			LOG.debug("algorithm test finish");
 		}
 
 		return set.output();

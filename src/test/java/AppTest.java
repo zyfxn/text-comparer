@@ -13,12 +13,12 @@ public class AppTest {
                 "a","b","c","d","e","f","g"
         };
         String[] secondary = {
-                "a","c","d","e","b","h","g"
+                "a","c","d","e","b","h","f","g"
         };
 
         CompareResult result = new Comparer().compare(primary, secondary);
 
-        if(!(result.getAdd() == 1 && result.getMod() == 1 && result.getDel() == 1)) {
+        if(!(result.getAdd() == 1 && result.getMod() == 0 && result.getDel() == 2)) {
             fail("main test result should be add 1, mod 0, del 1.");
         }
     }

@@ -19,9 +19,9 @@ public class App {
             s = TextFile.getFileContent(args[1]);
         }
 
-        Comparer c = new Comparer();
-        c.DEBUG = true;
-        c.compare(TextFile.splitFrom(p),
+        new Comparer()
+                .setDebug(true)
+                .compare(TextFile.splitFrom(p),
                 TextFile.splitFrom(s));
     }
 }
