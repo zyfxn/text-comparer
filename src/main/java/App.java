@@ -25,7 +25,6 @@ public class App {
 
         new Comparer()
                 .setDebug(true)
-                .compare(TextFile.splitFrom(p),
-                TextFile.splitFrom(s));
+                .compare(TextFile.splitFrom(p), TextFile.splitFrom(s));
     }
 }
