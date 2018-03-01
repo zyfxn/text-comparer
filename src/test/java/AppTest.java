@@ -57,4 +57,22 @@ public class AppTest {
             fail("completely different file test result should be add 2, mod 3, del 0.");
         }
     }
+
+    @Test
+    public void trimmedLengthThresholdExceededTest() {
+        String[] primary = {
+                "a","b","c","d","e"
+        };
+        String[] secondary = {
+                "a","2","3", "e"
+        };
+
+        CompareResult result = new Comparer()
+                .setTrimmedLengthThreshold(1)
+                .compare(primary, secondary);
+
+        if(!(result.getAdd() == 1 && result.getMod() == 2 && result.getDel() == 0)) {
+            fail("completely different file test result should be add 2, mod 3, del 0.");
+        }
+    }
 }

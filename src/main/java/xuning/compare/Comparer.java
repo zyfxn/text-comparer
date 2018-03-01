@@ -82,9 +82,8 @@ public class Comparer {
 				LOG.debug(String.format("length %d,%d exceed %d", pl.size(), sl.size(), trimmedLengthThreshold));
 			}
 
-			CompareResult res = matchedRangeWorker.getDifferenceResult()
-					.setTrimmedLengthThresholdExceeded(true);
-			return res;
+			return matchedRangeWorker.setTrimmedLengthThresholdExceeded(true)
+					.getDifferenceResult();
 		}
 
 		List<PairRange> solvedResult = solv(pl, sl);

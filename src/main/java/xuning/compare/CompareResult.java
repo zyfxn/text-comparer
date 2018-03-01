@@ -12,7 +12,7 @@ public class CompareResult extends Difference {
 	protected TreeSet<PairRange> matchedRangeSet;
 	protected List<PairRange> differentRangeList;
 
-	private boolean trimmedLengthThresholdExceeded;
+	protected boolean trimmedLengthThresholdExceeded;
 
 	public Set<PairRange> getMatchedRangeSet() {
 		return matchedRangeSet;
@@ -20,11 +20,6 @@ public class CompareResult extends Difference {
 
 	public boolean isTrimmedLengthThresholdExceeded() {
 		return trimmedLengthThresholdExceeded;
-	}
-
-	public CompareResult setTrimmedLengthThresholdExceeded(boolean trimmedLengthThresholdExceeded) {
-		this.trimmedLengthThresholdExceeded = trimmedLengthThresholdExceeded;
-		return this;
 	}
 
 	public List<PairRange> getDifferentRangeList() {

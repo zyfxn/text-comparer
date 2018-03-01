@@ -26,6 +26,11 @@ class MatchedRangeWorker extends CompareResult {
         return this;
     }
 
+    public MatchedRangeWorker setTrimmedLengthThresholdExceeded(boolean trimmedLengthThresholdExceeded) {
+        this.trimmedLengthThresholdExceeded = trimmedLengthThresholdExceeded;
+        return this;
+    }
+
     public void addRange(PairRange matchedRange) {
         matchedRangeSet.add(matchedRange);
     }
