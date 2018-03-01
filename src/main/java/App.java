@@ -9,6 +9,11 @@ public class App {
     public static void main(String[] args) throws IOException {
         PropertyConfigurator.configure("log4j.properties");
 
+        if(args.length < 2) {
+            System.out.println("usage: compare.jar <primary file path> <secondary file path>");
+            return;
+        }
+
         String p = null;
         String s = null;
 
