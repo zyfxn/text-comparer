@@ -3,6 +3,9 @@ import org.junit.Test;
 import xuning.compare.CompareResult;
 import xuning.compare.Comparer;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static org.junit.Assert.fail;
 
 public class AppTest {
@@ -15,8 +18,10 @@ public class AppTest {
         String[] secondary = {
                 "a","c","d","e","b","h","f","g"
         };
+        List<String> primary2 = new LinkedList<>();
 
-        CompareResult result = new Comparer().compare(primary, secondary);
+        CompareResult result = new Comparer()
+                .compare(getContentList(primary), getContentList(secondary));
 
         if(!(result.getAdd() == 1 && result.getMod() == 0 && result.getDel() == 2)) {
             fail("main test result should be add 1, mod 0, del 1.");
@@ -29,13 +34,14 @@ public class AppTest {
                 "a","b","c","d"
         };
 
-        CompareResult result = new Comparer().compare(primary, null);
+        CompareResult result = new Comparer()
+                .compare(getContentList(primary), null);
 
         if(!(result.getAdd() == 4 && result.getMod() == 0 && result.getDel() == 0)) {
             fail("single file test result should be add 4, mod 0, del 0.");
         }
 
-        result = new Comparer().compare(primary, new String[]{});
+        result = new Comparer().compare(getContentList(primary), getContentList(null));
 
         if(!(result.getAdd() == 4 && result.getMod() == 0 && result.getDel() == 0)) {
             fail("single file test result should be add 4, mod 0, del 0.");
@@ -51,7 +57,8 @@ public class AppTest {
                 "1","2","3"
         };
 
-        CompareResult result = new Comparer().compare(primary, secondary);
+        CompareResult result = new Comparer()
+                .compare(getContentList(primary), getContentList(secondary));
 
         if(!(result.getAdd() == 2 && result.getMod() == 3 && result.getDel() == 0)) {
             fail("completely different file test result should be add 2, mod 3, del 0.");
@@ -69,10 +76,20 @@ public class AppTest {
 
         CompareResult result = new Comparer()
                 .setTrimmedLengthThreshold(1)
-                .compare(primary, secondary);
+                .compare(getContentList(primary), getContentList(secondary));
 
         if(!(result.getAdd() == 1 && result.getMod() == 2 && result.getDel() == 0)) {
             fail("completely different file test result should be add 2, mod 3, del 0.");
         }
+    }
+
+    private List<String> getContentList(String[] str) {
+        List<String> output = new LinkedList<>();
+        if(str != null) {
+            for (int i = 0; i < str.length; i++) {
+                output.add(str[i]);
+            }
+        }
+        return output;
     }
 }

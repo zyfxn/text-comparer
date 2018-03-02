@@ -3,6 +3,7 @@ import org.apache.log4j.PropertyConfigurator;
 import xuning.util.TextFile;
 
 import java.io.IOException;
+import java.util.List;
 
 public class App {
 
@@ -13,8 +14,8 @@ public class App {
             return;
         }
 
-        String p = null;
-        String s = null;
+        List<String> p = null;
+        List<String> s = null;
 
         if (!args[0].isEmpty()) {
             p = TextFile.getFileContent(args[0]);
@@ -25,6 +26,6 @@ public class App {
 
         new Comparer()
                 .setDebug(true)
-                .compare(TextFile.splitFrom(p), TextFile.splitFrom(s));
+                .compare(p, s);
     }
 }

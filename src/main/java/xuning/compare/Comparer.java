@@ -37,17 +37,17 @@ public class Comparer {
 	 *            - secondary file content
 	 * @return {@code CompareResult}
 	 */
-	public CompareResult compare(String[] primaryFileContent, String[] secondaryFileContent) {
+	public CompareResult compare(List<String> primaryFileContent, List<String> secondaryFileContent) {
 		LinkedList<Line> pl = buildList(primaryFileContent);
 		LinkedList<Line> sl = buildList(secondaryFileContent);
 
 		matchedRangeWorker = new MatchedRangeWorker();
 
 		if(secondaryFileContent != null) {
-			matchedRangeWorker.setSecondaryRangeSize(secondaryFileContent.length);
+			matchedRangeWorker.setSecondaryRangeSize(secondaryFileContent.size());
 		}
 		if(primaryFileContent != null) {
-			matchedRangeWorker.setPrimaryRangeSize(primaryFileContent.length);
+			matchedRangeWorker.setPrimaryRangeSize(primaryFileContent.size());
 		}
 
 		// one of a file is empty
@@ -107,7 +107,7 @@ public class Comparer {
 				&& sl.size() > trimmedLengthThreshold;
 	}
 
-	private void printDetails(CompareResult result, String[] primaryFileContent, String[] secondaryFileContent) {
+	private void printDetails(CompareResult result, List<String> primaryFileContent, List<String> secondaryFileContent) {
 		if(result == null) return;
 
 		LOG.debug(String.format("diff: %s", result.toString()));
@@ -117,14 +117,14 @@ public class Comparer {
 			LOG.debug("");
 			if(primaryFileContent != null) {
 				for (int i = r.P().getLeft(); i <= r.P().getRight(); i++) {
-					LOG.debug(String.format("+%d>%s", i, primaryFileContent[i - 1]
+					LOG.debug(String.format("+%d>%s", i, primaryFileContent.get(i - 1)
 							.replaceAll("\t", "--->")));
 				}
 			}
 
 			if(secondaryFileContent != null) {
 				for (int i = r.S().getLeft(); i <= r.S().getRight(); i++) {
-					LOG.debug(String.format("-%d>%s", i, secondaryFileContent[i - 1]
+					LOG.debug(String.format("-%d>%s", i, secondaryFileContent.get(i - 1)
 							.replaceAll("\t", "--->")));
 				}
 			}
@@ -139,14 +139,15 @@ public class Comparer {
 	 * @return line data {@code LinkedList}. the value is null if content is
 	 *         null.
 	 */
-	private LinkedList<Line> buildList(String[] content) {
+	private LinkedList<Line> buildList(List<String> content) {
 		if (content == null) {
 			return null;
 		}
 
 		LinkedList<Line> data = new LinkedList<Line>();
-		for (int i = 0; i < content.length; i++) {
-			data.add(new Line(content[i], i + 1));
+		int i = 1;
+		for (String line : content) {
+			data.add(new Line(line, i++));
 		}
 
 		return data;
