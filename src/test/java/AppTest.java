@@ -79,7 +79,7 @@ public class AppTest {
                 .compare(getContentList(primary), getContentList(secondary));
 
         if(!(result.getAdd() == 1 && result.getMod() == 3 && result.getDel() == 0)) {
-            fail("trimmed length threshold exceeded test result should be add 1, mod 2, del 0.");
+            fail("trimmed length threshold exceeded test result should be add 1, mod 3, del 0.");
         }
     }
 
