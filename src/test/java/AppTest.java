@@ -68,18 +68,18 @@ public class AppTest {
     @Test
     public void trimmedLengthThresholdExceededTest() {
         String[] primary = {
-                "a","b","c","d","e"
+                "a","b","c","d","f","e"
         };
         String[] secondary = {
-                "a","2","3", "e"
+                "a","2","c","3","e"
         };
 
         CompareResult result = new Comparer()
                 .setTrimmedLengthThreshold(1)
                 .compare(getContentList(primary), getContentList(secondary));
 
-        if(!(result.getAdd() == 1 && result.getMod() == 2 && result.getDel() == 0)) {
-            fail("completely different file test result should be add 2, mod 3, del 0.");
+        if(!(result.getAdd() == 1 && result.getMod() == 3 && result.getDel() == 0)) {
+            fail("trimmed length threshold exceeded test result should be add 1, mod 2, del 0.");
         }
     }
 
