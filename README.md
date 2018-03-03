@@ -9,6 +9,6 @@ This project is a research for a **high speed** and
 
 * Command execute:
 ```
-java -jar compare.jar \<file1\> \<file2\>
+java -jar compare.jar <file1> <file2>
 ```
 * Library reference example: `src/main/java/App.java`, `src/test/java/AppTest.java`
