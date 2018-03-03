@@ -7,5 +7,8 @@ This project is a research for a **high speed** and
 
 ## Usage
 
-* Executable jar: java -jar compare.jar file1 file2
-* Library reference example: src/main/java/App.java
+* Command execute:
+```
+java -jar compare.jar \<file1\> \<file2\>
+```
+* Library reference example: `src/main/java/App.java`, `src/test/java/AppTest.java`
