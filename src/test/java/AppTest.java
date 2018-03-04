@@ -18,7 +18,6 @@ public class AppTest {
         String[] secondary = {
                 "a","c","d","e","b","h","f","g"
         };
-        List<String> primary2 = new LinkedList<>();
 
         CompareResult result = new Comparer()
                 .compare(getContentList(primary), getContentList(secondary));

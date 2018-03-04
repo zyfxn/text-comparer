@@ -218,11 +218,6 @@ public class SingleRange {
 		return left > right;
 	}
 
-	public void reset() {
-		left = 0;
-		right = -1;
-	}
-
 	public String toString() {
 		return String.format("%d-%d", left, right);
 	}
