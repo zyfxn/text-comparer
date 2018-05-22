@@ -2,8 +2,7 @@
 
 TextComparer is a **simple comparison tool** to show line numbers of difference between two text files.
 It uses a high performance graph algorithm to find the most of match lines in the line sequence from two files.
-This project is a research for a **high speed** and
-**low memory used** algorithm, working for files which have more than 50 thousand lines.
+**High speed** and **low memory used**.
 
 ## Usage
 
