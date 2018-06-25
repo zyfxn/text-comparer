@@ -1,4 +1,4 @@
-# TextComparer
+# text-comparer
 
 TextComparer is a **simple comparison tool** to show line numbers of difference between two text files.
 It uses a high performance graph algorithm to find the most of match lines in the line sequence from two files.
