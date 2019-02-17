@@ -13,13 +13,13 @@ class LeafSet {
 	private Node h;
 	private Node l;
 
-	private int sizeOfLineHaveSame;
+	private int remainingLineCountWhichHaveSame;
 	private boolean ending;
 
-	public LeafSet(int sizeOfLineHaveSame) {
+	public LeafSet(int totalLineCountWhichHaveSame) {
 		leafs = new TreeSet<>(new LeafComparator());
 		needDeleteLeafs = new LinkedList<>();
-		this.sizeOfLineHaveSame = sizeOfLineHaveSame;
+		this.remainingLineCountWhichHaveSame = totalLineCountWhichHaveSame;
 	}
 
 	public boolean add(int x, int y) {
@@ -65,8 +65,8 @@ class LeafSet {
 		if (ending && leafs.size() > 1)
 			leafs.remove(leafs.first());
 
-		sizeOfLineHaveSame--;
-		if (!ending && leafs.size() >= sizeOfLineHaveSame)
+		remainingLineCountWhichHaveSame--;
+		if (!ending && leafs.size() >= remainingLineCountWhichHaveSame)
 			ending = true;
 	}
 
