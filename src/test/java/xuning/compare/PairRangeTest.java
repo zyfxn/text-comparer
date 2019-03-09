@@ -7,67 +7,6 @@ import static org.junit.Assert.*;
 public class PairRangeTest {
 
     @Test
-    public void mergePairRange2to2and2to3_with_3to4and4to5_shouldBe_2to4and2to5() {
-        PairRange range0 = new PairRange(2,2,2,3);
-        PairRange range1 = new PairRange(3,4,4,5);
-
-        range0.merge(range1);
-        if(!range0.equals(2,4,2,5)) {
-            fail("pair range(2,2)(2,3) could merge (3,4)(4,5) to (2,4)(2,5)");
-        }
-    }
-
-    @Test
-    public void mergePairRange3to4and4to5_with_2to2and2to3_shouldBe_2to4and2to5() {
-        PairRange range0 = new PairRange(2,2,2,3);
-        PairRange range1 = new PairRange(3,4,4,5);
-
-        range1.merge(range0);
-        if(!range1.equals(2,4,2,5)) {
-            fail("pair range(3,4)(4,5) could merge (2,2)(2,3) to (2,4)(2,5)");
-        }
-    }
-
-    @Test
-    public void mergePairRange3to4and4to5_with_3to2and2to3_shouldBe_3to4and2to5() {
-        PairRange range0 = new PairRange(3,2,2,3);
-        PairRange range1 = new PairRange(3,4,4,5);
-
-        range1.merge(range0);
-        if(!range1.equals(3,4,2,5)) {
-            fail("pair range(3,4)(4,5) could merge (3,2)(2,3) to (2,4)(2,5)");
-        }
-    }
-
-    @Test
-    public void mergePairRange3to4and4to5_with_0to1and2to3_shouldChangeNothing() {
-        PairRange range0 = new PairRange(0,1,2,3);
-        PairRange range1 = new PairRange(3,4,4,5);
-
-        boolean success = range1.merge(range0);
-        if(success) {
-            fail("pair range(3,4)(4,5) could not merge (0,1)(2,3)");
-        }
-        if(!range1.equals(3,4,4,5)) {
-            fail("pair range(3,4)(4,5) could not merge (0,1)(2,3)");
-        }
-    }
-
-    @Test
-    public void mergePairRange3to4and4to5_with_2to2and6to7_shouldChangeNothing() {
-        PairRange range0 = new PairRange(2,2,6,7);
-        PairRange range1 = new PairRange(3,4,4,5);
-
-        boolean success = range1.merge(range0);
-        if(success) {
-            fail("pair range(3,4)(4,5) could not merge (0,1)(2,3)");
-        }
-        if(!range1.equals(3,4,4,5)) {
-            fail("pair range(3,4)(4,5) could not merge (0,1)(2,3)");
-        }
-    }
-
-    @Test
     public void mergePairRange2to2and2to3_with_line3and4_shouldBe2to3and2to4() {
         PairRange range0 = new PairRange(2,2,2,3);
 

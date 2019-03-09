@@ -51,31 +51,6 @@ public class PairRange {
 	}
 
 	/**
-	 * Merge from another pair of ranges. Successful if only two ranges in
-	 * argument is close to this corresponding ranges at same side.
-	 * <p>
-	 * <b>For example:</b><br>
-	 * (2,2)(2,3) can merge (3,4)(4,5) to (2,4)(2,5). (3,4)(4,5) are on the
-	 * right and close.<br>
-	 * range overlay at one of it is also cause failed.
-	 * 
-	 * @param r
-	 *            - a pair of range
-	 * @return successful if true
-	 */
-	public boolean merge(PairRange r) {
-		int dm = p.distanceTo(r.p);
-		int dn = s.distanceTo(r.s);
-
-		if ((dm == 1 && dn == 1) || (dm == -1 && dn == -1)) {
-			p.merge(r.p);
-			s.merge(r.s);
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Merge from another pair of one line ranges. Successful if only two ranges
 	 * in argument is close to this corresponding ranges at same side.
 	 * <p>
@@ -143,44 +118,6 @@ public class PairRange {
 
 		if ((dp > 0 && ds > 0) || (dp < 0 && ds < 0)) {
 			return new PairRange(p.between(bp), s.between(bs));
-		}
-		return null;
-	}
-
-	/**
-	 * {@link Difference} in a {@code PairRange} between this and the argument.
-	 * 
-	 * @param r
-	 *            - a pair of range
-	 * @return the value is null if two range in the argument at different side
-	 *         of this.
-	 */
-	public Difference different(PairRange r) {
-		int dp = p.distanceTo(r.p);
-		int ds = s.distanceTo(r.s);
-
-		if ((dp > 0 && ds > 0) || (dp < 0 && ds < 0)) {
-			return new Difference(Math.abs(dp) - 1, Math.abs(ds) - 1);
-		}
-		return null;
-	}
-
-	/**
-	 * {@link Difference} in a {@code PairRange} between this and a pair of
-	 * boundary.
-	 * 
-	 * @param bp
-	 *            - primary boundary
-	 * @param bs
-	 *            - secondary boundary
-	 * @return the value is null if two arguments at different side of this.
-	 */
-	public Difference different(int bp, int bs) {
-		int dp = p.distanceTo(bp);
-		int ds = s.distanceTo(bs);
-
-		if ((dp > 0 && ds > 0) || (dp < 0 && ds < 0)) {
-			return new Difference(Math.abs(dp) - 1, Math.abs(ds) - 1);
 		}
 		return null;
 	}

@@ -166,28 +166,6 @@ public class SingleRange {
 	}
 
 	/**
-	 * Merge range from another range. Nothing will happen if range has overlay.
-	 * <p>
-	 * <b>For example:</b><br>
-	 * (2,3) merge (5,8) is (2,8).<br>
-	 * (2,3) merge (1,0) is (1,3).<br>
-	 * 
-	 * @param r
-	 *            - range
-	 * @return successful if true
-	 */
-	public boolean merge(SingleRange r) {
-		if (r.right < this.left) {
-			setLeft(r.left);
-			return true;
-		} else if (this.right < r.left) {
-			setRight(r.right);
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Extend range to a line position. Nothing will happen if the line is in
 	 * the range.
 	 * <p>

@@ -207,43 +207,6 @@ public class SingleRangeTest {
     }
 
     @Test
-    public void mergeRange2to3_with_range5to8_is_range2to8() {
-        SingleRange range0 = new SingleRange(2,3);
-        SingleRange range1 = new SingleRange(5,8);
-
-        range0.merge(range1);
-        if(!range0.equals(2,8)) {
-            fail("merge range (2,3) with (5,8) should be (2,8).");
-        }
-    }
-
-    @Test
-    public void mergeRange2to3_with_range1to0_is_range1to3() {
-        SingleRange range0 = new SingleRange(2,3);
-        SingleRange range1 = new SingleRange(1,0);
-
-        range0.merge(range1);
-        if(!range0.equals(1,3)) {
-            fail("merge range (2,3) with (1,0) should be (1,3).");
-        }
-    }
-
-    @Test
-    public void mergeRange2to3_with_range1to2_nothingHappen() {
-        SingleRange range0 = new SingleRange(2,3);
-        SingleRange range1 = new SingleRange(1,2);
-
-        boolean success = range0.merge(range1);
-        if(success)
-        {
-            fail("merge range (2,3) with (1,2) should change nothing.");
-        }
-        if(!range0.equals(2,3)) {
-            fail("merge range (2,3) with (1,2) should change nothing.");
-        }
-    }
-
-    @Test
     public void extendRange2to3_to_8_is_range2to8() {
         SingleRange range0 = new SingleRange(2,3);
 
