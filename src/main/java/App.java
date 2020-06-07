@@ -1,9 +1,7 @@
 import xuning.compare.Comparer;
-import org.apache.log4j.PropertyConfigurator;
 import xuning.util.TextFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class App {

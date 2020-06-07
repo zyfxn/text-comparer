@@ -2,7 +2,8 @@ package xuning.compare;
 
 import java.util.*;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import xuning.compare.nakatsu.Solver;
 import xuning.compare.range.PairRange;
 
@@ -13,7 +14,7 @@ import xuning.compare.range.PairRange;
  */
 public class Comparer {
 
-	private static Logger LOG = Logger.getLogger(Comparer.class);
+	private static Logger LOG = LogManager.getLogger();
 
 	private boolean DEBUG = false;
 	private int trimmedLengthThreshold = 0;
@@ -58,7 +59,13 @@ public class Comparer {
 			postProcessor.addRange(matchedRange);
 		}
 
-		return postProcessor.getResult();
+		CompareResult result = postProcessor.getResult();
+
+		if (DEBUG) {
+			printDetails(result, primaryFileContent, secondaryFileContent);
+		}
+
+		return result;
 	}
 
 	public CompareResult compareOld(List<String> primaryFileContent, List<String> secondaryFileContent) {

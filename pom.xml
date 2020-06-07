@@ -6,7 +6,7 @@
 
     <groupId>xuning</groupId>
     <artifactId>compare</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <dependencies>
         <dependency>
@@ -15,9 +15,14 @@
             <version>4.12</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.12</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.12.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.12.1</version>
         </dependency>
     </dependencies>
 
