@@ -1,4 +1,6 @@
-package xuning.compare;
+package xuning.compare.range;
+
+import xuning.compare.Difference;
 
 /**
  * The class {@code PairRange} represents a pair of ranges, {@link SingleRange}

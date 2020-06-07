@@ -1,4 +1,4 @@
-package xuning.compare;
+package xuning.compare.range;
 
 import org.junit.Test;
 

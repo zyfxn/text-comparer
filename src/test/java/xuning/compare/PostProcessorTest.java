@@ -1,16 +1,17 @@
 package xuning.compare;
 
 import org.junit.Test;
+import xuning.compare.range.PairRange;
 
 import java.util.List;
 
 import static org.junit.Assert.fail;
 
-public class MatchedRangeWorkerTest {
+public class PostProcessorTest {
 
     @Test
     public void getDifferentRangesTest() {
-        MatchedRangeWorker ranges = new MatchedRangeWorker()
+        PostProcessor ranges = new PostProcessor()
                 .setPrimaryRangeSize(10)
                 .setSecondaryRangeSize(11);
 
@@ -18,7 +19,7 @@ public class MatchedRangeWorkerTest {
         ranges.addRange(new PairRange(4,6,5,7));
         ranges.addRange(new PairRange(9,9,9,9));
 
-        List<PairRange> diffRangeList = ranges.getDifferenceResult()
+        List<PairRange> diffRangeList = ranges.getResult()
                 .getDifferentRangeList();
         if(diffRangeList.size() != 3) {
             fail("get different range list test, result should have 3 one.");

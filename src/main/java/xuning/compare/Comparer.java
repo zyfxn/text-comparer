@@ -3,6 +3,8 @@ package xuning.compare;
 import java.util.*;
 
 import org.apache.log4j.Logger;
+import xuning.compare.nakatsu.Solver;
+import xuning.compare.range.PairRange;
 
 /**
  * 
@@ -15,8 +17,6 @@ public class Comparer {
 
 	private boolean DEBUG = false;
 	private int trimmedLengthThreshold = 0;
-
-	private MatchedRangeWorker matchedRangeWorker;
 
 	public Comparer setDebug(boolean DEBUG) {
 		this.DEBUG = DEBUG;
@@ -38,21 +38,40 @@ public class Comparer {
 	 * @return {@code CompareResult}
 	 */
 	public CompareResult compare(List<String> primaryFileContent, List<String> secondaryFileContent) {
+		ArrayList<String> arrayList;
+		if (primaryFileContent instanceof ArrayList) {
+			arrayList = (ArrayList)primaryFileContent;
+		} else {
+			arrayList = new ArrayList<>();
+			for (String content : primaryFileContent) {
+				arrayList.add(content);
+			}
+		}
+
+		List<PairRange> res = new Solver().run(arrayList, secondaryFileContent);
+
+		PostProcessor postProcessor = new PostProcessor();
+		postProcessor.setPrimaryRangeSize(primaryFileContent != null ? primaryFileContent.size() : 0);
+		postProcessor.setSecondaryRangeSize(secondaryFileContent != null ? secondaryFileContent.size() : 0);
+
+		for(PairRange matchedRange : res) {
+			postProcessor.addRange(matchedRange);
+		}
+
+		return postProcessor.getResult();
+	}
+
+	public CompareResult compareOld(List<String> primaryFileContent, List<String> secondaryFileContent) {
 		LinkedList<Line> pl = buildList(primaryFileContent);
 		LinkedList<Line> sl = buildList(secondaryFileContent);
 
-		matchedRangeWorker = new MatchedRangeWorker();
-
-		if(secondaryFileContent != null) {
-			matchedRangeWorker.setSecondaryRangeSize(secondaryFileContent.size());
-		}
-		if(primaryFileContent != null) {
-			matchedRangeWorker.setPrimaryRangeSize(primaryFileContent.size());
-		}
+		PostProcessor postProcessor = new PostProcessor();
+		postProcessor.setPrimaryRangeSize(primaryFileContent != null ? primaryFileContent.size() : 0);
+		postProcessor.setSecondaryRangeSize(secondaryFileContent != null ? secondaryFileContent.size() : 0);
 
 		// one of a file is empty
 		if (pl == null || pl.size() == 0 || sl == null || sl.size() == 0) {
-			CompareResult result = matchedRangeWorker.getDifferenceResult();
+			CompareResult result = postProcessor.getResult();
 			if (DEBUG) {
 				LOG.debug(String.format("diff: %s", result.toString()));
 			}
@@ -63,13 +82,13 @@ public class Comparer {
 		Iterator<Line> si = sl.iterator();
 		// trim from head
 		PairRange head = trim(pi, si);
-		if(head != null) matchedRangeWorker.addRange(head);
+		if(head != null) postProcessor.addRange(head);
 
 		pi = pl.descendingIterator();
 		si = sl.descendingIterator();
 		// trim from tail
 		PairRange tail = trim(pi, si);
-		if(tail != null) matchedRangeWorker.addRange(tail);
+		if(tail != null) postProcessor.addRange(tail);
 
 		if (DEBUG) {
 			LOG.debug("trim: " + (head != null ? head.toString() : "none") + ";"
@@ -82,17 +101,17 @@ public class Comparer {
 				LOG.debug(String.format("length %d,%d exceed %d", pl.size(), sl.size(), trimmedLengthThreshold));
 			}
 
-			return matchedRangeWorker.setTrimmedLengthThresholdExceeded(true)
-					.getDifferenceResult();
+			return postProcessor.setTrimmedLengthThresholdExceeded(true)
+					.getResult();
 		}
 
-		List<PairRange> solvedResult = solv(pl, sl);
+		List<PairRange> solvedResult = solve(pl, sl);
 
 		for(PairRange matchedRange : solvedResult) {
-			matchedRangeWorker.addRange(matchedRange);
+			postProcessor.addRange(matchedRange);
 		}
 
-		CompareResult result = matchedRangeWorker.getDifferenceResult();
+		CompareResult result = postProcessor.getResult();
 
 		if (DEBUG) {
 			printDetails(result, primaryFileContent, secondaryFileContent);
@@ -222,7 +241,7 @@ public class Comparer {
 	 *            - secondary file data
 	 * @return the longest same paired ranges.
 	 */
-	private List<PairRange> solv(LinkedList<Line> p, LinkedList<Line> s) {
+	private List<PairRange> solve(LinkedList<Line> p, LinkedList<Line> s) {
 		if (p == null || s == null)
 			return null;
 

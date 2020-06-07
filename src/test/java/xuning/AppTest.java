@@ -1,4 +1,5 @@
-import org.apache.log4j.PropertyConfigurator;
+package xuning;
+
 import org.junit.Test;
 import xuning.compare.CompareResult;
 import xuning.compare.Comparer;
@@ -65,7 +66,7 @@ public class AppTest {
     }
 
     @Test
-    public void trimmedLengthThresholdExceededTest() {
+    public void mainTest2() {
         String[] primary = {
                 "a","b","c","d","f","e"
         };
@@ -73,11 +74,9 @@ public class AppTest {
                 "a","2","c","3","e"
         };
 
-        CompareResult result = new Comparer()
-                .setTrimmedLengthThreshold(1)
-                .compare(getContentList(primary), getContentList(secondary));
+        CompareResult result = new Comparer().compare(getContentList(primary), getContentList(secondary));
 
-        if(!(result.getAdd() == 1 && result.getMod() == 3 && result.getDel() == 0)) {
+        if(!(result.getAdd() == 1 && result.getMod() == 2 && result.getDel() == 0)) {
             fail("trimmed length threshold exceeded test result should be add 1, mod 3, del 0.");
         }
     }

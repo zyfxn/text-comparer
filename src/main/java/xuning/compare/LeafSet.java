@@ -1,5 +1,7 @@
 package xuning.compare;
 
+import xuning.compare.range.PairRange;
+
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;

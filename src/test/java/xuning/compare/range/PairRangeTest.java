@@ -1,6 +1,7 @@
-package xuning.compare;
+package xuning.compare.range;
 
 import org.junit.Test;
+import xuning.compare.Difference;
 
 import static org.junit.Assert.*;
 
