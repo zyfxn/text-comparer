@@ -24,7 +24,7 @@ public class AppTest {
                 .compare(getContentList(primary), getContentList(secondary));
 
         if(!(result.getAdd() == 1 && result.getMod() == 0 && result.getDel() == 2)) {
-            fail("main test result should be add 1, mod 0, del 1.");
+            fail("main test result should be add 1, mod 0, del 2.");
         }
     }
 
@@ -77,7 +77,7 @@ public class AppTest {
         CompareResult result = new Comparer().compare(getContentList(primary), getContentList(secondary));
 
         if(!(result.getAdd() == 1 && result.getMod() == 2 && result.getDel() == 0)) {
-            fail("main test 2 result should be add 1, mod 3, del 0.");
+            fail("main test 2 result should be add 1, mod 2, del 0.");
         }
     }
 
@@ -93,7 +93,23 @@ public class AppTest {
         CompareResult result = new Comparer().compare(getContentList(primary), getContentList(secondary));
 
         if(!(result.getAdd() == 0 && result.getMod() == 1 && result.getDel() == 0)) {
-            fail("main test 3 result should be add 1, mod 3, del 0.");
+            fail("main test 3 result should be add 0, mod 1, del 0.");
+        }
+    }
+
+    @Test
+    public void mainTest4() {
+        String[] primary = {
+                "a","","","f","e","h"
+        };
+        String[] secondary = {
+                "a","b","d","f","e",""
+        };
+
+        CompareResult result = new Comparer().compare(getContentList(primary), getContentList(secondary));
+
+        if(!(result.getAdd() == 0 && result.getMod() == 3 && result.getDel() == 0)) {
+            fail("main test 3 result should be add 0, mod 3, del 0.");
         }
     }
 
