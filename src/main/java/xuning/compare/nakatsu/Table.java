@@ -52,9 +52,12 @@ public class Table {
         List<PairRange> res = new LinkedList<>();
 
         PairRange tmp = null;
-        for (Line line : nodeTable) {
-            int i = line.getLastI();
-            int h = line.getH(i);
+        int h = 0;
+        for (int j = nodeTable.size() - 1; j >= 0; j--) {
+            Line line = nodeTable.get(j);
+            Entry<Integer, Integer> entry = line.getEntryHHigherThan(h);
+            int i = entry.getKey();
+            h = entry.getValue();
 
             if (tmp == null) {
                 tmp = new PairRange(i, h);
@@ -87,12 +90,13 @@ public class Table {
             return nodes.firstEntry().getValue().intValue();
         }
 
-        public int getLastI() {
-            return nodes.lastKey().intValue();
-        }
-
-        public int getH(int i) {
-            return nodes.get(i);
+        public Entry<Integer, Integer> getEntryHHigherThan(int h) {
+            for (Entry<Integer, Integer> entry : nodes.entrySet()) {
+                if (entry.getValue().intValue() > h) {
+                    return entry;
+                }
+            }
+            throw new RuntimeException("can not find node");
         }
     }
 }
