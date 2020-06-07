@@ -81,6 +81,22 @@ public class AppTest {
         }
     }
 
+    @Test
+    public void mainTest3() {
+        String[] primary = {
+                "a","","c","","f","e"
+        };
+        String[] secondary = {
+                "a","","c","d","f","e"
+        };
+
+        CompareResult result = new Comparer().compare(getContentList(primary), getContentList(secondary));
+
+        if(!(result.getAdd() == 0 && result.getMod() == 1 && result.getDel() == 0)) {
+            fail("trimmed length threshold exceeded test result should be add 1, mod 3, del 0.");
+        }
+    }
+
     private List<String> getContentList(String[] str) {
         List<String> output = new LinkedList<>();
         if(str != null) {
