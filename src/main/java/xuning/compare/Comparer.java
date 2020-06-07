@@ -44,8 +44,10 @@ public class Comparer {
 			arrayList = (ArrayList)primaryFileContent;
 		} else {
 			arrayList = new ArrayList<>();
-			for (String content : primaryFileContent) {
-				arrayList.add(content);
+			if (primaryFileContent != null) {
+				for (String content : primaryFileContent) {
+					arrayList.add(content);
+				}
 			}
 		}
 

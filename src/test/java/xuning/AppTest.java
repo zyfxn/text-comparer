@@ -46,6 +46,18 @@ public class AppTest {
         if(!(result.getAdd() == 4 && result.getMod() == 0 && result.getDel() == 0)) {
             fail("single file test result should be add 4, mod 0, del 0.");
         }
+
+        result = new Comparer().compare(null, getContentList(primary));
+
+        if(!(result.getAdd() == 0 && result.getMod() == 0 && result.getDel() == 4)) {
+            fail("single file test result should be add 0, mod 0, del 4.");
+        }
+
+        result = new Comparer().compare(getContentList(null), getContentList(primary));
+
+        if(!(result.getAdd() == 0 && result.getMod() == 0 && result.getDel() == 4)) {
+            fail("single file test result should be add 0, mod 0, del 4.");
+        }
     }
 
     @Test
