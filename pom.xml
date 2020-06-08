@@ -48,7 +48,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>App</mainClass>
+                            <mainClass>xuning.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -1,3 +1,5 @@
+package xuning;
+
 import xuning.compare.Comparer;
 import xuning.util.TextFile;
 
