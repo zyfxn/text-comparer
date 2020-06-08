@@ -52,11 +52,11 @@ public class Table {
         List<PairRange> res = new LinkedList<>();
 
         PairRange tmp = null;
-        int h = 0;
+        int h = 0, i = 0;
         for (int j = nodeTable.size() - 1; j >= 0; j--) {
             Line line = nodeTable.get(j);
-            Entry<Integer, Integer> entry = line.getEntryHHigherThan(h);
-            int i = entry.getKey();
+            Entry<Integer, Integer> entry = line.getEntryHHigherThan(i, h);
+            i = entry.getKey();
             h = entry.getValue();
 
             if (tmp == null) {
@@ -90,9 +90,9 @@ public class Table {
             return nodes.firstEntry().getValue().intValue();
         }
 
-        public Entry<Integer, Integer> getEntryHHigherThan(int h) {
+        public Entry<Integer, Integer> getEntryHHigherThan(int i, int h) {
             for (Entry<Integer, Integer> entry : nodes.entrySet()) {
-                if (entry.getValue().intValue() > h) {
+                if (entry.getValue().intValue() > h && entry.getKey().intValue() > i) {
                     return entry;
                 }
             }
