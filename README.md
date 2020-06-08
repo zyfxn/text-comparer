@@ -1,6 +1,6 @@
 # text-comparer
 
-Text-comparer is a **simple comparison tool** to show line numbers of difference between two text files.
+Text-comparer is a **simple comparison tool** to show the difference between two text files. Using Nakatsu algorithm.
 
 ## Usage
 
